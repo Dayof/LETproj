@@ -198,3 +198,19 @@ class Identities(models.Model):
 
 	def __unicode__(self):
 		return u'%d : %s' % (self.identity, self.model)
+
+
+## Classe que define o modelo de mensagens.
+#   Colunas já implementadas:
+#
+#   SEND:    Entidade que manda a mensagem.\n
+#   RECEV:   Entidade que manda a mensagem.\n
+#	HOUR:	 Hora em que a mensagem foi enviada.\n
+#	DATE:	 Data em que a mensagem foi enviada.
+class Messages(models.Model):
+	identity = models.IntegerField()
+	field = models.CharField(max_length=32)
+	value = models.TextField()
+
+	def __unicode__(self):
+		return u'%d : %s = %s' % (self.identity, self.field, self.value)

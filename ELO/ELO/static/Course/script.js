@@ -68,4 +68,27 @@ $(document).ready(function(){
         else
             $(this).attr('disabled', 'disabled');
     });
+
+    // MESSAGES ------------------------------------
+
+    $dialog = $(".dialog").dialog({
+        autoOpen: false,
+        show: {
+            effect: "blind",
+            duration: 1
+        },
+        hide: {
+            effect: "blind",
+            duration: 1
+        },
+        modal: true,
+        resizable: false,
+
+    });
+
+    $("div[class^='question']").click(function(){
+        $dialog.load("/assync/course-question/", 
+            function(){ $dialog.dialog('open');
+        });
+    });
 });
