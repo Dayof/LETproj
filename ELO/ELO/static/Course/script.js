@@ -16,7 +16,7 @@ $(document).ready(function(){
             });
     }
 
-    // Lesson Listing
+    // Lesson Listing2
 
     $accordion = $("#module_accordion").accordion({
         icons: {    "header": "ui-icon-plus",
@@ -68,4 +68,23 @@ $(document).ready(function(){
         else
             $(this).attr('disabled', 'disabled');
     });
+
+
 });
+
+function dnd_alloWDrop(ev)
+{
+    ev.preventDefault();
+}
+
+function dnd_drag(ev)
+{
+    ev.dataTransfer.setData("text", ev.target.id)
+}
+
+function dnd_drop(ev)
+{
+    ev.preventDefault();
+    var data = ev.dataTransfer.getData("text");
+    ev.target.appendChild(document.getElementById(data));
+}

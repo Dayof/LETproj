@@ -422,6 +422,7 @@ class PersProfile(IfPersProfile):
             ]
 
             sfc = sf('COURSE') # select field courses
+            sfc = sfc if sfc else []
 
             if database is Student:
                 fetchset = fetchset + [     
@@ -431,6 +432,7 @@ class PersProfile(IfPersProfile):
 
                 lc = [] # List of courses
                 
+
                 if sfc:
                     for c in sfc:
                         # Select Field for Modules Completed
@@ -455,7 +457,8 @@ class PersProfile(IfPersProfile):
                         cname = Courses.objects.get(identity=c, field='NAME').value
                         lc = lc + [{'name':cname, 
                                      'id':c, 
-                                     'completion': int(mcftc*100/nmod)}]
+                                     'completion': mcftc,
+                                     'total': nmod }]
 
                 sfc = lc
 

@@ -13,7 +13,7 @@
 from django import template
 
 from Course.forms import *
-from Course.macros import ExerciseType, FORM_WRAPPER
+from Course.macros import ExerciseType, FORM_WRAPPER, DND_WRAPPER
 
 import ELO.locale.index as lang
 
@@ -140,9 +140,10 @@ class ExerciseToken(template.Node):
             elif len(self.formatString) < 2:
                 self.formatString.append("")
 
+            wrapper = FORM_WRAPPER
+
             if exerciseNode.type == ExerciseType.MultipleChoice:
-                exercise = MultipleChoiceExercise()
-                exercise.fields['options'].choices = exerciseNode.options
+                exercise = MultipleChoiceExercise(exerciseNode.options)()
 
             elif exerciseNode.type == ExerciseType.FillTheBlank:
                 exercise = FillTheBlankExercise()
@@ -159,16 +160,17 @@ class ExerciseToken(template.Node):
 
             elif exerciseNode.type == ExerciseType.DragAndDrop:
                 exercise = DragAndDropExercise()
-                # something goes here, probably
+                exercise.fields['bloat'].initial = init_str
+                wrapper = DND_WRAPPER
 
             else:
                 exercise = ''
 
-            print exercise
-            print self.formatString
+            if exercise != '':
+                exercise.fields['exercise_id'].initial = exerciseNode.id
 
-            return FORM_WRAPPER(exercise, 
-                                exerciseNode.csrf, 
+            return wrapper(exercise,
+                                exerciseNode.csrf,
                                 self.formatString)
 
         except template.VariableDoesNotExist:

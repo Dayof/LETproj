@@ -19,8 +19,19 @@ import ELO.locale.index as lang
 
 from ELO.models import Courses, Module, Lesson, Exercise, Student
 
-from Course.forms import LessonForm
-from Course.macros import LESSONS_URL, GENERAL_URL, EXERCISES_URL, ExerciseType
+from Course.macros import ( LESSONS_URL, 
+                            GENERAL_URL, 
+                            EXERCISES_URL, 
+                            CORRECT_URL,
+                            WRONG_URL, 
+                            ExerciseType
+                          )
+
+from Course.forms import (  LessonForm, 
+                            ExerciseForm, 
+                            MultipleChoiceExercise,
+                            FillTheBlankExercise
+                         )
 
 from django.middleware import csrf
 from django.shortcuts import render
@@ -229,6 +240,14 @@ class UiCourse(IfUiCourse):
 
         elif request.method == "POST":
             lesson_form = LessonForm(request.POST)
+            
+            # É importante fazer a cópia, para que seja possível
+            # modificá-la na linha abaixo.
+            exercise_form = ExerciseForm(request.POST.copy())
+            
+            # É importante limpar a form, já que a classe mãe não possui
+            # opções válidas.
+            exercise_form.data['options'] = []
             try:
                 if lesson_form.is_valid():
                     lessonid = lesson_form.cleaned_data['lesson_id']
@@ -266,7 +285,18 @@ class UiCourse(IfUiCourse):
 
                         return render(request, url, { 'max': maxslides,
                                                       'exercise': exercise })
+                elif exercise_form.is_valid():
+                    exerciseId = exercise_form.cleaned_data["exercise_id"]
+
+                    try:
+                        if self.bus.correctExercise(request.POST, exerciseId):
+                            return render(request, CORRECT_URL)
+                        else:
+                            return render(request, WRONG_URL)
+                    except ValueError:
+                        raise ValueError(lang.DICT['EXCEPTION_INV_ANS'])
                 else:
+                    print exercise_form.errors
                     raise ValueError(lang.DICT['EXCEPTION_INV_LES'])
             except ValueError as exc:
                 return render(request, GENERAL_URL("assync_std.html"),
@@ -335,14 +365,21 @@ class BusCourse(IfBusCourse):
 
     def createExercise(self, request, ex_url):
 
-        ex_data = self.pers.retrieve('LINK', ex_url, Exercise)
+        ex_id = self.pers.getid('LINK', ex_url, Exercise)
+        ex_data = self.pers.fetch(ex_id, Exercise)
 
         exercise = {'url': ex_url, 
                     'type': int(ex_data['TYPE'][0]),
-                    'csrf': csrf.get_token(request)}
+                    'csrf': csrf.get_token(request) if request else None,
+                    'id': ex_id}
 
         exerciseType = int(ex_data['TYPE'][0])
 
+        ## Exercício de Múltipla Escolha.
+        #
+        #   TYPE: 1
+        #   ITEM_k, k natural: nome da k-ésima opção
+        #   CORRECT: k | k é a resposta correta
         if exerciseType == ExerciseType.MultipleChoice:
             options = []
             i = "1"
@@ -352,9 +389,17 @@ class BusCourse(IfBusCourse):
 
             exercise['options'] = options
 
+        ## Exercício de preencher o vazio.
+        #
+        #   TYPE: 2
+        #   CORRECT: uma das possíveis soluções
         elif exerciseType == ExerciseType.FillTheBlank:
             pass # nothing to do here
 
+        ## Exercício de desembaralhar.
+        #
+        #   TYPE: 3
+        #   WORD_k, k natural: k-ésima palavra a ser desembaralhada.
         elif exerciseType == ExerciseType.Unscramble:
             words = []
             i = "1"
@@ -364,6 +409,14 @@ class BusCourse(IfBusCourse):
 
             exercise['words'] = shuffle(words)
 
+        ## Exercício de Palavras-cruzadas.
+        #
+        #   TYPE: 4
+        #   WORD: palavra que pode ser dividida em xydw:
+        #       x: coordenada x da primeira letra da palavra dentro da matriz;
+        #       y: coordenada y da primeira letra da palavra dentro da matriz;
+        #       d: direção em que a palavra cresce ('N', 'S', 'W', 'E');
+        #       w: palavra propriamente dita.
         elif exerciseType == ExerciseType.CrossWords:
             wordList = []
             
@@ -376,31 +429,106 @@ class BusCourse(IfBusCourse):
 
             exercise['words'] = wordList
 
+        ## Exercício de Arrastar e Soltar.
+        #
+        #   TYPE: 5
+        #   ITEM_k, k natural: k-ésima imagem
         elif exerciseType == ExerciseType.DragAndDrop:
-            pass # Not sure what to put here yet
+            left = []
+            right = []
+            i = "1"
+
+            while "ITEM_" + i in ex_data:
+                left.append(ex_data["ITEM_" + i][0])
+                right.append(ex_data["ITEM_" + i][1])
+                
+                i = str(int(i)+1)
+
+            shuffle(right)
+            shuffle(left)
+
+            exercise['left'] = left
+            exercise['right'] = right
+            exercise['number'] = len(images)
 
         return type("Exercise", (), exercise)
 
-    def correctExercise(self, ex_url, answer):
-        
-        ex_data = self.pers.retrieve('LINK', ex_url, Exercise)
+    def correctExercise(self, request, exid):
+
+        ex_data = self.pers.fetch(exid.value, Exercise)
         exerciseType = int(ex_data['TYPE'][0])
 
         if exerciseType == ExerciseType.MultipleChoice:
-            return True if answer == ex_data['CORRECT'][0] else False
+
+            dummy = self.createExercise(None, ex_data['LINK'][0])
+
+            answer = MultipleChoiceExercise(dummy.options)(request)
+
+            try:
+                if answer.is_valid():
+                    answer = answer.cleaned_data['options']
+                    return True if answer == ex_data['CORRECT'][0] \
+                                else False
+                else:
+                   raise ValueError()
+            except ValueError as exc:
+                print exc
+                raise ValueError()
 
         elif exerciseType == ExerciseType.FillTheBlank:
-            return True if answer in ex_data['CORRECT'] else False
+            
+            answer = FillTheBlankExercise(request)
+
+            if answer.is_valid():
+                answer = answer.cleaned_data['blank']
+                return True if answer in ex_data['CORRECT'] \
+                            else False
+            else:
+                raise ValueError()
 
         elif exerciseType == ExerciseType.Unscramble:
-            ## TODO: Verificar corretude
-            return True if answer == ex_data['CORRECT'][0] else False
 
-        elif exerciseType == ExerciseType.CrossWords: pass
-            # TODO: something
+            answer = UnscrambleExercise(request)
 
-        elif exerciseType == ExerciseType.DragAndDrop: pass
-            # TODO: Lotsa things
+            if answer.is_valid():
+                answer = answer.cleaned_data['bloat']
+                i = "1"
+                while "WORD_" + i in ex_data:
+                    if answer[i] != ex_data["WORD_" + i][0]:
+                        return False
+                return True
+            else:
+                raise ValueError()
+
+        elif exerciseType == ExerciseType.CrossWords:
+        
+            answer = CrossWordsExercise(request)
+
+            if answer.is_valid():
+                answer = answer.cleaned_data['bloat']
+
+                for ans in ex_data["WORD"]:
+                    if not (ans in answer):
+                        return False
+                return True
+            else:
+                raise ValueError()
+
+        elif exerciseType == ExerciseType.DragAndDrop:
+
+            answer = DragAndDropExercise(request)
+
+            if answer.is_valid():
+                answer = answer.cleaned_data['bloat']
+
+                i = "1"
+                while "ITEM_" + i in ex_data:
+                    if ex_data["ITEM_" + i][0] != answer[i]:
+                        return False
+
+                return True
+            else:
+                raise ValueError()
 
         else: return False
 
@@ -408,8 +536,11 @@ class BusCourse(IfBusCourse):
 class PersCourse(IfPersCourse):
 
     def getid(self, field, value, db):
-        model_data = db.objects.get(field=field, value=value)
-        return model_data.identity
+        try:
+            model_data = db.objects.get(field=field, value=value)
+            return model_data.identity
+        except db.DoesNotExist as exc:
+            raise ValueError(exc)
 
     def fetch(self, id, db):
         model_data = db.objects.filter(identity=id)
