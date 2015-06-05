@@ -455,7 +455,7 @@ class PersProfile(IfPersProfile):
                         cname = Courses.objects.get(identity=c, field='NAME').value
                         lc = lc + [{'name':cname, 
                                      'id':c, 
-                                     'completion': mcftc*100/nmod}]
+                                     'completion': int(mcftc*100/nmod)}]
 
                 sfc = lc
 
