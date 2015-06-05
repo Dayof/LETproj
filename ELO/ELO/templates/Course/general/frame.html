@@ -8,6 +8,8 @@
     <link   rel="stylesheet"
             type="text/css"
             href="{% static 'Course/styles.css' %}" />
+    <link   rel="stylesheet"
+            href="{% static 'Adm/icons/css/font-awesome.min.css' %}" />
 {% endblock %}
 
 {% block content %}
@@ -37,6 +39,11 @@
             </div>
         {% endfor %}
         </div>
+            <center>
+                <div class="question">
+                    <i class="fa fa-question"></i>
+                </div>
+            </center>
     </div>
     <div id="topper">
         
@@ -52,5 +59,7 @@
         </center>
     </div>
     <br />
+
+    <div class="dialog"></div>
 
 {% endblock %}

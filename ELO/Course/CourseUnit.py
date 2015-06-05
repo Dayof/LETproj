@@ -17,7 +17,7 @@ from random import shuffle
 
 import ELO.locale.index as lang
 
-from ELO.models import Courses, Module, Lesson, Exercise, Student
+from ELO.models import Courses, Module, Lesson, Exercise, Student, Messages
 
 from Course.macros import ( LESSONS_URL, 
                             GENERAL_URL, 

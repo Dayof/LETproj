@@ -9,11 +9,13 @@ CREATE TABLE "Login_login" (
 );
 INSERT INTO "Login_login" VALUES(1,1,'name','Yurick');
 INSERT INTO "Login_login" VALUES(2,1,'password','a793812b');
+
 CREATE TABLE "django_session" (
     "session_key" varchar(40) NOT NULL PRIMARY KEY,
     "session_data" text NOT NULL,
     "expire_date" datetime NOT NULL
 );
+
 INSERT INTO "django_session" VALUES('6au0ucrv5jth0h2x3en8nw7nhmonuest','M2ZkYjlkNjI0NWJkOGFkNTNkZWNkZDc2NTU0ZDEzZTgzMjE3N2FkZDqAAn1xAS4=','2013-12-13 20:02:07.051907');
 INSERT INTO "django_session" VALUES('mf7gycnjohoonqtysxah6c0x4jycldc3','ZjUzZmFhOGQzYmY2ZjNiNDE3YjYyZGM4YmVlMTBmMDE5MDUwNDE2NjqAAn1xAVUEdXNlcnECY0VMTy5CYXNlVW5pdApOYW1lCnEDKYFxBH1xBVUGX3ZhbHVlcQZYBgAAAFl1cmlja3EHc2JzLg==','2014-01-01 16:47:13.807835');
 INSERT INTO "django_session" VALUES('h3bynrb4bhvxfm1ssz88u2ra1sv0ilk2','ZjUzZmFhOGQzYmY2ZjNiNDE3YjYyZGM4YmVlMTBmMDE5MDUwNDE2NjqAAn1xAVUEdXNlcnECY0VMTy5CYXNlVW5pdApOYW1lCnEDKYFxBH1xBVUGX3ZhbHVlcQZYBgAAAFl1cmlja3EHc2JzLg==','2013-12-25 19:48:07.760919');
@@ -120,11 +122,13 @@ INSERT INTO "django_content_type" VALUES(8,'courses','ELO','courses');
 INSERT INTO "django_content_type" VALUES(9,'lesson','ELO','lesson');
 INSERT INTO "django_content_type" VALUES(10,'exercise','ELO','exercise');
 INSERT INTO "django_content_type" VALUES(11,'identities','ELO','identities');
+
 CREATE TABLE "django_session" (
     "session_key" varchar(40) NOT NULL PRIMARY KEY,
     "session_data" text NOT NULL,
     "expire_date" datetime NOT NULL
 );
+
 INSERT INTO "django_session" VALUES('3ewvot5bp7vm4om0zon1hxe1pnfebtzc','ZWRhZDI4NzAxMjUwMDkwZDY2NTczZmI4YWMxYjI0MjVhNDQzYjkxNzp7InVzZXIiOnsicGFzc3dvcmQiOiJkYWZiN2JiNjhhZjM3OWM2YzM5MWZmOWU0ZjJkMWJiZSIsInR5cGUiOiJBZG0iLCJuYW1lIjoiRGF5YW5uZSIsImxhbmd1YWdlIjoicHQtYnIifX0=','2014-10-17 18:11:23.278731');
 INSERT INTO "django_session" VALUES('tzqiuiajf3agum8ffobip264rkkqndb9','MWY4ZjA0NDYwMmU0MWQxOWM1ODg3YzFiZGRkOTkyOGIwYTU4MzZjMTp7Il9sYW5ndWFnZSI6ImVuIn0=','2014-10-17 21:15:22.493487');
 INSERT INTO "django_session" VALUES('qv3f743pm7yv2y40ni3cxkdtwzdj35qt','NDI1MzQxM2VkZGFiMGQzZGNiZDY4OWY4NDcyOGI3ZWRhYzJiNjhlNTp7Il9sYW5ndWFnZSI6InB0LWJyIiwidXNlciI6eyJwYXNzd29yZCI6ImIwZjE2NDYyNTJmNDQzNGJlM2VmNzRlN2FiNmFjMTc3IiwidHlwZSI6IkFkbSIsIm5hbWUiOiJZdXJpY2siLCJsYW5ndWFnZSI6InB0LWJyIn19','2014-10-17 21:16:15.356578');
@@ -198,9 +202,9 @@ INSERT INTO "ELO_professor" VALUES(1,1,'NAME','Dayof');
 INSERT INTO "ELO_professor" VALUES(2,1,'PASSWORD','dafb7bb68af379c6c391ff9e4f2d1bbe');
 INSERT INTO "ELO_professor" VALUES(3,1,'LANGUAGE','en');
 
-INSERT INTO "ELO_professor" VALUES(3,1,'NAME','Yurick');
-INSERT INTO "ELO_professor" VALUES(4,1,'PASSWORD','b0f1646252f4434be3ef74e7ab6ac177');
-INSERT INTO "ELO_professor" VALUES(5,1,'LANGUAGE','en');
+INSERT INTO "ELO_professor" VALUES(4,2,'NAME','Yurick');
+INSERT INTO "ELO_professor" VALUES(5,2,'PASSWORD','b0f1646252f4434be3ef74e7ab6ac177');
+INSERT INTO "ELO_professor" VALUES(6,2,'LANGUAGE','en');
 
 CREATE TABLE "django_migrations" ("id" integer NOT NULL PRIMARY KEY AUTOINCREMENT, "app" varchar(255) NOT NULL, "name" varchar(255) NOT NULL, "applied" datetime NOT NULL);
 INSERT INTO "django_migrations" VALUES(1,'contenttypes','0001_initial','2014-10-03 21:10:53.126238');
