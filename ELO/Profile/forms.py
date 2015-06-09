@@ -15,7 +15,8 @@ from ELO.BaseUnit import(
     Sex,
     PlainText,
     Password,
-    Link)
+    Link,
+    ExType)
 
 ## Formulário de edição de nome.
 #   Capaz de modificar o nome do usuário no sistema.
@@ -111,7 +112,8 @@ class SexForm(forms.Form):
 #   Não afeta de forma relevante a navegação ou qualquer outra forma de
 #   interação com o aluno.
 class BiosForm(forms.Form):
-    newdata     = forms.CharField(required=False, widget=forms.Textarea(attrs={'style':'width:90%;'}))
+    newdata     = forms.CharField(required=False, 
+                        widget=forms.Textarea(attrs={'style':'width:90%;'}))
 
     def clean_newdata(self):
         try:
@@ -135,3 +137,22 @@ class InterestsForm(forms.Form):
 
 class AvatarForm(forms.Form):
     newdata     = forms.FileField()
+
+class QuestionForm(forms.Form):
+    question     = forms.CharField(required=True, 
+                        widget=forms.Textarea(attrs={'style':'width:90%;'}))
+    question_id = forms.IntegerField(required=True, widget=forms.HiddenInput)
+
+    def clean_question(self):
+        try:
+            q = PlainText(self.cleaned_data['question'])
+        except ValueError as exc:
+            raise forms.ValidationError(exc)
+        return q
+
+    def clean_question_id(self):
+        try:
+            qid = ExType(self.cleaned_data['question_id'])
+        except ValueError as exc:
+            raise forms.ValidationError(exc)
+        return qid

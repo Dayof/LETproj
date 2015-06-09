@@ -33,6 +33,8 @@ from Course.forms import (  LessonForm,
                             FillTheBlankExercise
                          )
 
+from Profile.forms import QuestionForm
+
 from django.middleware import csrf
 from django.shortcuts import render
 from django.core.exceptions import PermissionDenied
@@ -180,6 +182,12 @@ class IfBusCourse:
     @abstractmethod
     def correctExercise(self, ex_url, answer): pass
 
+    @abstractmethod
+    def getNewQuestionId(self): pass
+
+    @abstractmethod
+    def registerQuestion(self, request):pass
+
 
 ## Interface da camada de Persistência para o módulo de Curso.
 #   Deve ser capaz de acessar de forma transparente o banco de dados.
@@ -219,6 +227,12 @@ class IfPersCourse:
     @abstractmethod
     def fetch(self, id, db): pass
 
+    @abstractmethod
+    def getQuestionId(self): pass
+
+    @abstractmethod
+    def questionIn(seld, id, send, recev, hour, date):pass
+
 
 class UiCourse(IfUiCourse):
 
@@ -255,6 +269,27 @@ class UiCourse(IfUiCourse):
 
                     slidenum = lesson_form.cleaned_data['slide_number']
                     slidenum = slidenum.value
+
+                    if 'question_form' in request.POST:
+                            q_form = QuestionForm()
+                            q_id = self.bus.getNewQuestionId()
+
+                            return render(request, 'Course/quest.html', 
+                                        {'lesson_id':lessonid, 'module_id':0, 
+                                        'exercise_id': 0, 'course_id': 0,
+                                        'slide_num': slidenum, 
+                                        'question_id': q_id,
+                                        'form' : q_form})
+
+                    # Id da questão quando o form é submetido.
+                    elif 'question_id' in request.POST:
+                        q_form = QuestionForm(request.POST)
+
+                        if q_form.is_valid():
+                            self.bus.registerQuestion(request)
+                        else:
+                            print q_form.errors
+                            raise ValueError(lang.DICT['EXCEPTION_INV_LES'])
 
                     gc = self.bus.getCompleted
 
@@ -301,7 +336,7 @@ class UiCourse(IfUiCourse):
             except ValueError as exc:
                 return render(request, GENERAL_URL("assync_std.html"),
                         {'error': exc})
-                
+            
 
 class BusCourse(IfBusCourse):
 
@@ -342,7 +377,6 @@ class BusCourse(IfBusCourse):
                                       }]
         
         coursedata['MODULE'] = sorted(modulelist, key=lambda x: x['id'])
-
         return coursedata
 
     def getLesson(self, lessonid):
@@ -532,6 +566,15 @@ class BusCourse(IfBusCourse):
 
         else: return False
 
+    def getNewQuestionId(self):
+        qid = self.pers.getQuestionId()
+
+        return qid
+
+    def registerQuestion(self, request):
+        return 
+
+
 
 class PersCourse(IfPersCourse):
 
@@ -554,3 +597,35 @@ class PersCourse(IfPersCourse):
             format_data[i['field']]=format_data.get(i['field'],[])+[i['value']]
 
         return format_data
+ 
+    def getQuestionId(self):
+        # Coleta as mensagens ordenadas.
+        catch = Messages.objects.order_by('identity')
+
+        if not catch:
+            # Tenta coletar o último id inserido.
+            #   Caso não tenha ocorrido nenhum registro de mensagens então
+            #   é atribuído o valor inicial como '1'
+            try:
+                # Coleta o ultimo ID inserido no identity do database.
+                lastid = Messages.objects.order_by('-identity')[0]
+                # Newid será a identity do novo usuário.
+                newid = lastid.identity + 1
+            except IndexError:
+                newid = 1
+        else:
+            # Atribui o menor valor de identidade à nova conta a ser criada 
+            #   e retira este número do banco de dados de id's disponíveis.
+            newid = catch[0].identity
+
+        return newid
+        
+    def questionIn(seld, dict_field_value):
+        # Percorre o dicionário ligado aos campos a seu valores.
+        for fields in dict_field_value:
+            # Insere novos dados: identidade, campo e a novo valor.
+            data = Messages(identity=newid, field=fields,
+                             value=dict_field_value[fields])
+            # Salva os novos dados no database.
+            data.save()
+

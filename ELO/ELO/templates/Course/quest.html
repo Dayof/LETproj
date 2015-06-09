@@ -1,0 +1,30 @@
+{% extends "includes/assync_wrapper.html" %}
+{% load staticfiles %}
+
+{% block head %}
+    <script src="{% static 'Course/script.js' %}"></script>
+    <link   rel="stylesheet"
+            type="text/css"
+            href="{% static 'Course/styles.css' %}" />
+    <link   rel="stylesheet"
+            href="{% static 'Adm/icons/css/font-awesome.min.css' %}" />
+{% endblock %}
+
+{% block body %}
+	module_id : {{ module_id }}
+	lesson_id : {{ lesson_id }}
+	exercise_id : {{ exercise_id }}
+	course_id : {{ course_id }}
+	slide_id : {{ slide_num }}
+
+	<form id="question_form" action="" method="post">
+		{{ form }}
+		{% csrf_token %}
+		<input type="submit" value="Submit"></input>
+	</form>
+
+	<div id ="qid_{{ question_id }}"></div>
+
+{% endblock %}
+
+

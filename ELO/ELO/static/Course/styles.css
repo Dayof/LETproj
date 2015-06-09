@@ -30,7 +30,6 @@ html, body,.content { height: 100%; }
     float: left;
     height: 62%;
     position: relative;
-    float: left;
     background-color: #aaaaaa;
     overflow: scroll;
 }
@@ -55,6 +54,12 @@ html, body,.content { height: 100%; }
 #lesson_ctn img
 {
     height: 90%;
+}
+
+i.fa.fa-question::before
+{
+    float: left;
+    cursor: pointer;
 }
 
 #c_bt

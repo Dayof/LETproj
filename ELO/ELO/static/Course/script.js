@@ -71,7 +71,7 @@ $(document).ready(function(){
 
     // MESSAGES ------------------------------------
 
-    $dialog = $(".dialog").dialog({
+    dialog = $(".dialog").dialog({
         autoOpen: false,
         show: {
             effect: "blind",
@@ -83,14 +83,36 @@ $(document).ready(function(){
         },
         modal: true,
         resizable: false,
-
+        height: 300,
+        width: 350,
     });
 
-    $("div[class^='question']").click(function(){
-        $dialog.load("/assync/course-question/", 
-            function(){ $dialog.dialog('open');
+    $("#icon-search").click(function(){
+        dialog.dialog("open");
+        l_id = $info.id;
+        s_id = $info.slide;
+
+        dialog.load("/assync/question/",{'question_form':1, 'lesson_id':l_id, 
+                            'slide_number':s_id,
+                            'csrfmiddlewaretoken': $.cookie('csrftoken')});
+    });
+
+    $("#question_form").submit(function(e){
+        e.preventDefault();
+
+        var result = {}
+        var postData = $(this).serializeArray();
+
+        $.each( postData, function( i, pD ) {
+            result[pD.name] = pD.value;
         });
+
+        result['question_id'] = $("div[id^='qid_']").attr('id').slice(4);
+
+        dialog.load("/assync/question/", result);
     });
+
+
 });
 
 function dnd_alloWDrop(ev)
@@ -109,3 +131,4 @@ function dnd_drop(ev)
     var data = ev.dataTransfer.getData("text");
     ev.target.appendChild(document.getElementById(data));
 }
+

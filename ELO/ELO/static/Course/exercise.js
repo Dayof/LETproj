@@ -5,8 +5,6 @@ $(document).ready(function(){
 
         $a = $("#ans");
         $a.load("/assync/exercise", exercise);
-
-        
     }
 
     $("#exercise").submit(function(ev){
