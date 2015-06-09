@@ -169,8 +169,6 @@ class Factory:
 				self.__ui = UiCourse(self.__bus)
 
 			return self.__ui.run(request, courseid)
-		else:
-			return self.__ui.run(request, courseid)
 		print 'runCourse(' +str(self)+','+str(request)+',courseid='+str(courseid)
 		raise PermissionDenied(lang.DICT["EXCEPTION_403_STD"])
 		
