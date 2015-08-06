@@ -108,6 +108,7 @@ class Factory:
 	def runProfile(self, request, acctype, field=None):
 		if 'user' in request.session.keys(): # is user logged?
 			user_type = request.session['user']['type']
+			print user_type
 			if user_type == 'Professor' or user_type == 'Tutor' or \
 				user_type == 'Student':
 				if not isinstance(self.__ui, IfUiProfile):

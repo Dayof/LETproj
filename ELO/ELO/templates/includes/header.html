@@ -11,6 +11,13 @@
             </div>
         </div>
     </a>
+
+    {% if user == "Professor" %}
+        <div id="icon-message">
+            <i class="fa fa-envelope">
+        </i>
+    </div>
+    {% endif %} 
     
     {% if user %}
     <a href="/logout">

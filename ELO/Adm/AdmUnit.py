@@ -34,7 +34,10 @@ from forms import (
     EditCourForm,
     EditAdmForm)
 
-from tables_models import StudentTable, ProfessorTable, CoursesTable
+from tables_models import ( 
+    StudentTable, 
+    ProfessorTable, 
+    CoursesTable)
 
 from Profile.forms import (
     NameForm, 
@@ -45,15 +48,19 @@ from Profile.forms import (
     InterestsForm,
     AvatarForm)
 
+from Adm.macros import (
+    ACCOUNTS_URL,
+    HOME_URL,
+    NEW_URL,
+    EDIT_URL,
+    DEL_URL)
+
 from django.shortcuts import render
 from django.conf import settings
 from django.http import HttpResponseRedirect
 from django import forms
 
-HOME_ACCOUNTS = 'Adm/adm_accounts.html'
-NEW_ACCOUNTS = "Adm/new_acc.html"
-EDIT_ACCOUNTS = "Adm/edit_acc.html"
-DEL_ACCOUNT = "Adm/del_acc.html"
+## Constantes do módulo de Administração.
 STUDENTS = 'students'
 PROFESSORS = 'professors'
 TUTORS = 'tutors'
@@ -399,7 +406,7 @@ class UiAdm(IfUiAdm):
 
 
         elif not (model or username): #request.method == "GET"
-            return render(request, "Adm/home.html", {"role": \
+            return render(request, ACCOUNTS_URL('home.html'), {"role": \
                                             request.session['user']['type']})
         else: #request.method == "AJAX"
             model1 = model[0]
@@ -408,7 +415,7 @@ class UiAdm(IfUiAdm):
 
             if model1 == "s":
                 model = model3
-                URL = HOME_ACCOUNTS
+                URL = HOME_URL
 
                 if model == COURSES:
                     form = SrcCourForm()
@@ -417,7 +424,7 @@ class UiAdm(IfUiAdm):
 
             elif model1 == "n":
                 model = model3
-                URL = NEW_ACCOUNTS
+                URL = NEW_URL
 
                 if model ==COURSES:
                     form = RegCourForm()
@@ -428,7 +435,7 @@ class UiAdm(IfUiAdm):
 
             elif model1 == "d":
                 model = model3
-                URL = DEL_ACCOUNT
+                URL = DEL_URL
 
                 if model == COURSES:
                     form = SrcCourForm()
@@ -437,7 +444,7 @@ class UiAdm(IfUiAdm):
 
             elif model1 == "e":
                 model = model[4:]
-                URL = EDIT_ACCOUNTS
+                URL = EDIT_URL
                 acc = self.bus.fetchAccount(model, None, username)
 
                 if model == COURSES:
@@ -455,15 +462,13 @@ class UiAdm(IfUiAdm):
                                                 'userSex': acc[0]['SEX'], 
                                                 'userEmail': acc[0]['EMAIL']})
             elif model1 == "c":
-                URL = "Adm/conf_action.html"
-                print model1
+                URL = ACCOUNTS_URL('conf_action.html')
                 return render(request, URL, {'conf': conf,})
 
             else:
-                URL = HOME_ACCOUNTS
+                URL = HOME_URL
                 exc = True
             
-            print model
             data = self.bus.allAccounts(model)
             table = self.__make_table(model, data, NAME)
             RequestConfig(request, paginate={"per_page": 25}).configure(table)

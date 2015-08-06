@@ -16,7 +16,7 @@ from ELO.BaseUnit import(
     PlainText,
     Password,
     Link,
-    ExType)
+    Id)
 
 ## Formulário de edição de nome.
 #   Capaz de modificar o nome do usuário no sistema.
@@ -126,7 +126,7 @@ class BiosForm(forms.Form):
 #   Capaz de modificar a lista de interesses do jovem usuário.
 #   Talvez venhamos a utilizar isso mais para frente.
 class InterestsForm(forms.Form):
-    newdata     = forms.CharField(required=False)
+    newdata    = forms.CharField(required=False)
 
     def clean_newdata(self):
         try:
@@ -139,7 +139,7 @@ class AvatarForm(forms.Form):
     newdata     = forms.FileField()
 
 class QuestionForm(forms.Form):
-    question     = forms.CharField(required=True, 
+    question    = forms.CharField(required=True, 
                         widget=forms.Textarea(attrs={'style':'width:90%;'}))
     question_id = forms.IntegerField(required=True, widget=forms.HiddenInput)
 
@@ -152,7 +152,7 @@ class QuestionForm(forms.Form):
 
     def clean_question_id(self):
         try:
-            qid = ExType(self.cleaned_data['question_id'])
+            qid = Id(self.cleaned_data['question_id'])
         except ValueError as exc:
             raise forms.ValidationError(exc)
         return qid

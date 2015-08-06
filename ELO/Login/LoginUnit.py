@@ -143,7 +143,7 @@ class UiLogin(IfUiLogin):
                     self.bus.validate(login_form.cleaned_data['username'],
                         login_form.cleaned_data['password'], database)
                 else:
-                    raise ValueError(lang.DICT['EXCEPTION_INV_LOG'])
+                    raise ValueError(login_form.errors)
             except ValueError as exc:
                 if database.__name__ == "Professor":
                     target = "proflogin"

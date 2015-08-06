@@ -164,7 +164,7 @@ class ConfAdmForm(forms.Form):
 #	cadastrado, validando o cadastro com a senha de administrador.
 class RegCourForm(forms.Form):
 	courMatric=forms.IntegerField(label= "Código da Disciplina", 
-								required = True)
+					widget = forms.TextInput(attrs={'readonly':'readonly'}))
 	courName= forms.CharField(max_length = 32, label ="Nome da Disciplina", 
 							required = True)
 	courProfessor = forms.CharField( max_length = 32, 
@@ -217,7 +217,8 @@ class SrcCourForm(forms.Form):
 		return matric
 
 class EditUserForm(forms.Form):
-	username = forms.CharField(label = "Nome:", widget = forms.TextInput(attrs={'readonly':'readonly'}))
+	username = forms.CharField(label = "Nome:", 
+						widget = forms.TextInput(attrs={'readonly':'readonly'}))
 	userMatric = forms.IntegerField(label = "Matricula:",required= True)
 	userCampus = forms.IntegerField(label = "Código do Campus:",
 									required= True) 
@@ -274,7 +275,7 @@ class EditUserForm(forms.Form):
 
 class EditCourForm(forms.Form):
 	courMatric=forms.IntegerField(label= "Código da Disciplina", 
-								widget = forms.TextInput(attrs={'readonly':'readonly'}))
+						widget = forms.TextInput(attrs={'readonly':'readonly'}))
 	courName= forms.CharField(max_length = 32, label ="Nome da Disciplina", 
 							required = True)
 	courProfessor = forms.CharField( max_length = 32, 
@@ -312,7 +313,7 @@ class EditCourForm(forms.Form):
 
 class EditAdmForm(forms.Form):
 	username = forms.CharField(label = "Nome:", 
-								widget = forms.TextInput(attrs={'readonly':'readonly'}))
+					widget = forms.TextInput(attrs={'readonly':'readonly'}))
 	userEmail =  forms.EmailField(label = "Email:", required= True)
 	
 	## Verifica se a formatação do nome do usuário está correta.
@@ -333,4 +334,15 @@ class EditAdmForm(forms.Form):
 			raise forms.ValidationError(lang.DICT["EXCEPTION_INV_STU_ML"])
 		return email	
 
+## Classe para o formulário de adição de estudantes a um determinado curso.
+#	O administrador insere as matrículas dos alunos a serem cadastrados.
+class AddStuCourForm(forms.Form):
+	courStudent = forms.CharField(required=False, 
+				widget=forms.TextInput(attrs={'placeholder':"Matrículas..."}))
 
+	def clean_courStudent(self):
+		try:
+			cs = PlainText(self.cleaned_data['courStudent'])
+		except ValueError as exc:
+			raise forms.ValidationError(exc)
+		return cs

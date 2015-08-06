@@ -12,7 +12,6 @@ $(document).ready(function(){
                 function(){
                         $info.id = less_id;
                         $info.slide = slide;
-
             });
     }
 
@@ -88,13 +87,21 @@ $(document).ready(function(){
     });
 
     $("#icon-search").click(function(){
-        dialog.dialog("open");
+
         l_id = $info.id;
         s_id = $info.slide;
 
-        dialog.load("/assync/question/",{'question_form':1, 'lesson_id':l_id, 
-                            'slide_number':s_id,
-                            'csrfmiddlewaretoken': $.cookie('csrftoken')});
+        if (l_id  >= 0)
+        {
+            dialog.dialog("open");
+
+            console.log($info);
+        
+
+            dialog.load("/assync/question/",
+                {'question':1, 'lesson_id':l_id, 'slide_number':s_id,
+                'csrfmiddlewaretoken': $.cookie('csrftoken')}); 
+        }       
     });
 
     $("#question_form").submit(function(e){
@@ -108,11 +115,27 @@ $(document).ready(function(){
         });
 
         result['question_id'] = $("div[id^='qid_']").attr('id').slice(4);
+        ids = $("div[id^='lid_']").attr('id');
+        result['lesson_id'] = ids.slice(ids.indexOf('d_')+2, ids.indexOf('_s'));
+        result['slide_number'] = ids.slice(ids.indexOf('n_')+2);
+
+        eid = $("div[id^='eid_']").attr('id').slice(4);
+
+        if(eid){
+            result['exercise_id'] = eid;
+        }
 
         dialog.load("/assync/question/", result);
     });
 
-
+    function closeFunction(){
+        ids = $("div[id^='lid_']").attr('id');
+        if (ids){
+            less_id = ids.slice(ids.indexOf('d_')+2, ids.indexOf('_s')).parseInt();
+            slide = ids.slice(ids.indexOf('n_')+2).parseInt();
+            loadLesson(less_id, slide);
+        }
+    }
 });
 
 function dnd_alloWDrop(ev)

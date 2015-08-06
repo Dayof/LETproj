@@ -17,7 +17,13 @@ from random import shuffle
 
 import ELO.locale.index as lang
 
-from ELO.models import Courses, Module, Lesson, Exercise, Student, Messages
+from ELO.models import (Courses, 
+                        Module, 
+                        Lesson, 
+                        Exercise, 
+                        Student, 
+                        Messages,
+                        Professor)
 
 from Course.macros import ( LESSONS_URL, 
                             GENERAL_URL, 
@@ -41,6 +47,7 @@ from django.core.exceptions import PermissionDenied
 from django.http import Http404
 from django.forms import ValidationError
 from django import template
+import datetime
 
 ## Interface da camada de Apresentação do módulo de Curso.
 #   É responsável pelo devido processamento do frame de curso; seleção de
@@ -186,7 +193,7 @@ class IfBusCourse:
     def getNewQuestionId(self): pass
 
     @abstractmethod
-    def registerQuestion(self, request):pass
+    def registerQuestion(self, request, user, time):pass
 
 
 ## Interface da camada de Persistência para o módulo de Curso.
@@ -228,10 +235,16 @@ class IfPersCourse:
     def fetch(self, id, db): pass
 
     @abstractmethod
+    def fetchCourse(self, lid): pass
+
+    @abstractmethod
+    def fetchProfessor(self, cid): pass
+
+    @abstractmethod
     def getQuestionId(self): pass
 
     @abstractmethod
-    def questionIn(seld, id, send, recev, hour, date):pass
+    def questionIn(seld, newid, m_values):pass
 
 
 class UiCourse(IfUiCourse):
@@ -270,58 +283,78 @@ class UiCourse(IfUiCourse):
                     slidenum = lesson_form.cleaned_data['slide_number']
                     slidenum = slidenum.value
 
-                    if 'question_form' in request.POST:
-                            q_form = QuestionForm()
-                            q_id = self.bus.getNewQuestionId()
-
-                            return render(request, 'Course/quest.html', 
-                                        {'lesson_id':lessonid, 'module_id':0, 
-                                        'exercise_id': 0, 'course_id': 0,
-                                        'slide_num': slidenum, 
-                                        'question_id': q_id,
-                                        'form' : q_form})
-
-                    # Id da questão quando o form é submetido.
-                    elif 'question_id' in request.POST:
-                        q_form = QuestionForm(request.POST)
-
-                        if q_form.is_valid():
-                            self.bus.registerQuestion(request)
-                        else:
-                            print q_form.errors
-                            raise ValueError(lang.DICT['EXCEPTION_INV_LES'])
-
-                    gc = self.bus.getCompleted
-
-                    if unicode(lessonid) not in gc(user, 'LOCK') and\
-                       unicode(lessonid) not in gc(user, 'LESSON'):
-                            ld = lang.DICT
-                            raise PermissionDenied(ld["EXCEPTION_403_STD"])
-                        
-
                     lesson = self.bus.getLesson(lessonid)
-
                     maxslides = lesson['slides']+len(lesson['exercises'])
 
-                    if slidenum >= maxslides or slidenum < 0:
-                        raise PermissionDenied(lang.DICT["EXCEPTION_403_STD"])
+                    if 'question' in request.POST:
+                        sub = False
+                        exc = False
+                        q_id = None
+                        e_id = None
+                        q_form = QuestionForm()
 
-                    if slidenum < lesson['slides']:
-                        lurl = lesson['url']
-                        url = LESSONS_URL(lurl + "/" + str(slidenum) + ".html")
+                        if not 'question_id' in request.POST:
+                            q_id = self.bus.getNewQuestionId() 
+                            
+                            if slidenum >= lesson['slides']:
+                                e_id = slidenum - lesson['slides']     
+                        else:
+                            try: 
+                                q_form = QuestionForm(request.POST)
+                                
+                                if q_form.is_valid():
+                                    time = datetime.datetime.now()
+                                    self.bus.registerQuestion(request, user, time)
+                                    q_id = q_form.cleaned_data['question_id']
+                                    sub = True
+                                else: 
+                                    # TODO LANG
+                                    raise ValueError(q_form.errors)
+                            except ValueError as exce:
+                                exc = exce      
 
-                        return render(request, url, { 'max': maxslides })
+                        print type(slidenum)
+                        print slidenum
+
+                        return render(request, 'Course/quest.html', 
+                                {'lesson_id': lessonid, 'slide_number': slidenum,
+                                'exercise_id': e_id, 'question_id': q_id, 
+                                'form': q_form, 'sub': sub, 'exc': exc}) 
                     else:
-                        exercise_id = slidenum - lesson['slides']
-                        exercise_url = lesson['exercises'][exercise_id]
-                        url = EXERCISES_URL(exercise_url + ".html")
+                        gc = self.bus.getCompleted
 
-                        exercise=self.bus.createExercise(request, exercise_url)
+                        if unicode(lessonid) not in gc(user, 'LOCK') and\
+                           unicode(lessonid) not in gc(user, 'LESSON'):
+                                ld = lang.DICT
+                                raise PermissionDenied(ld["EXCEPTION_403_STD"])
 
-                        return render(request, url, { 'max': maxslides,
-                                                      'exercise': exercise })
+
+                        if slidenum >= maxslides or slidenum < 0:
+                            raise PermissionDenied(lang.DICT["EXCEPTION_403_STD"])
+
+                        if slidenum < lesson['slides']:
+                            lurl = lesson['url']
+                            url = LESSONS_URL(lurl + "/" + str(slidenum) + ".html")
+
+                            return render(request, url, { 'max': maxslides })
+                        else:
+                            exercise_id = slidenum - lesson['slides']
+                            exercise_url = lesson['exercises'][exercise_id]
+                            url = EXERCISES_URL(exercise_url + ".html")
+
+                            exercise=self.bus.createExercise(request, exercise_url)
+
+                            return render(request, url, { 'max': maxslides,
+                                                          'exercise': exercise })
                 elif exercise_form.is_valid():
                     exerciseId = exercise_form.cleaned_data["exercise_id"]
+
+                    if 'question_form' in request.POST:
+                        q_id = self.bus.getNewQuestionId() 
+
+                        return render(request, 'Course/quest.html', 
+                            {'exercise_id':exerciseId, 'question_id': q_id, 
+                            'form' : q_form, 'sub':sub, 'exc': exc})    
 
                     try:
                         if self.bus.correctExercise(request.POST, exerciseId):
@@ -339,7 +372,6 @@ class UiCourse(IfUiCourse):
             
 
 class BusCourse(IfBusCourse):
-
 
     def getCompleted(self, user, accesstype):
         userdata = self.pers.retrieve('NAME', user['name'], Student)
@@ -571,10 +603,24 @@ class BusCourse(IfBusCourse):
 
         return qid
 
-    def registerQuestion(self, request):
-        return 
+    def registerQuestion(self, request, user, time):
+        lid = request.POST['lesson_id']
+        slid = request.POST['slide_number']
 
+        cid = self.pers.fetchCourse(lid)
+        pofc = str(self.pers.fetchProfessor(cid))
+        sid = str(self.pers.getid("NAME", user['name'], Student))
 
+        m_values = {'SEND': sid+'S', 'RECEV': pofc+'P', 
+                'HOUR': str(time.hour)+':'+str(time.minute) ,
+                'DATE': str(time.day)+'-'+str(time.month)+'-'+str(time.year),
+                'MESS': request.POST['question'], 'LESSON': lid, 
+                'SLIDE': slid}
+
+        if request.POST['exercise_id'] != 'None':
+            m_values['EXERCISE'] = request.POST['exercise_id']
+
+        self.pers.questionIn(request.POST['question_id'],m_values)
 
 class PersCourse(IfPersCourse):
 
@@ -597,35 +643,49 @@ class PersCourse(IfPersCourse):
             format_data[i['field']]=format_data.get(i['field'],[])+[i['value']]
 
         return format_data
- 
-    def getQuestionId(self):
-        # Coleta as mensagens ordenadas.
-        catch = Messages.objects.order_by('identity')
 
-        if not catch:
-            # Tenta coletar o último id inserido.
-            #   Caso não tenha ocorrido nenhum registro de mensagens então
-            #   é atribuído o valor inicial como '1'
-            try:
-                # Coleta o ultimo ID inserido no identity do database.
-                lastid = Messages.objects.order_by('-identity')[0]
-                # Newid será a identity do novo usuário.
-                newid = lastid.identity + 1
-            except IndexError:
-                newid = 1
-        else:
-            # Atribui o menor valor de identidade à nova conta a ser criada 
-            #   e retira este número do banco de dados de id's disponíveis.
-            newid = catch[0].identity
+    def fetchCourse(self, lid):
+        cid = None
+
+        try:
+            lesson = Lesson.objects.get(identity=lid, field="COURSE")
+            cid = lesson.value
+
+        except (database.DoesNotExist, 
+            database.MultipleObjectsReturned) as exc: 
+            raise ValueError(exc)
+
+        return cid
+
+    def fetchProfessor(self, cid):
+        pid = None
+
+        try:
+            prof = Professor.objects.get(field="COURSE")
+            pid = prof.identity
+
+        except (Professor.DoesNotExist, 
+            Professor.MultipleObjectsReturned) as exc: 
+            raise ValueError(exc)
+
+        return pid
+
+    def getQuestionId(self):
+        try:
+            # Coleta o ultimo ID inserido.
+            lastid = Messages.objects.order_by('-identity')[0]
+            newid = lastid.identity+1
+        except IndexError:
+            newid = 1
 
         return newid
         
-    def questionIn(seld, dict_field_value):
+    def questionIn(seld, newid, m_values):
         # Percorre o dicionário ligado aos campos a seu valores.
-        for fields in dict_field_value:
+        for fields in m_values:
             # Insere novos dados: identidade, campo e a novo valor.
             data = Messages(identity=newid, field=fields,
-                             value=dict_field_value[fields])
+                             value=m_values[fields])
             # Salva os novos dados no database.
             data.save()
 

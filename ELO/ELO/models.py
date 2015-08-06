@@ -163,6 +163,7 @@ class Module(models.Model):
 #   EXERCISES:  Lista de ínteiros que representam os exercícios associados
 #                   à lição correspondente.\n
 #   SLIDES:     Número de slides que a lição possui.\n
+#	COURSE:		Id do curso vinculado a cada lição.\n
 class Lesson(models.Model):
 	identity = models.IntegerField()
 	field = models.CharField(max_length=32)
@@ -206,7 +207,10 @@ class Identities(models.Model):
 #   SEND:    Entidade que manda a mensagem.\n
 #   RECEV:   Entidade que manda a mensagem.\n
 #	HOUR:	 Hora em que a mensagem foi enviada.\n
-#	DATE:	 Data em que a mensagem foi enviada.
+#	DATE:	 Data em que a mensagem foi enviada.\n
+#	MESS:	 Mensagem.\n
+#	LESSON:	 Id da Lição a qual se destina a dúvida.\n
+#	SLIDE:	 Id do Slide o qual se destina a dúvida.\n
 class Messages(models.Model):
 	identity = models.IntegerField()
 	field = models.CharField(max_length=32)
@@ -214,3 +218,4 @@ class Messages(models.Model):
 
 	def __unicode__(self):
 		return u'%d : %s = %s' % (self.identity, self.field, self.value)
+

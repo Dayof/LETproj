@@ -3,7 +3,7 @@ $(document).ready(function(){
 	$("#acc_search").submit(function(e){
 		e.preventDefault();
 
-		var result = {}
+		var result = {};
 		var postData = $(this).serializeArray();
 
 		$.each( postData, function( i, pD ) {
@@ -12,7 +12,7 @@ $(document).ready(function(){
 	
       	model = $("h2[id^='mod_']").attr("id").slice(4);
       	result["model"] = model;
-      	result['act'] = "search"
+      	result['act'] = "search";
 
 		$(".container").load("adm/"+model+"/search/", result);
 	});
@@ -30,7 +30,7 @@ $(document).ready(function(){
 	$("#reg_form").submit(function(e){
 		e.preventDefault();
 
-		var result = {}
+		var result = {};
 		var postData = $(this).serializeArray();
 
 		$("#dialog-confirm").html("Deseja confirmar esta ação?");
@@ -71,7 +71,7 @@ $(document).ready(function(){
 	$("#del_form").submit(function(e){
 		e.preventDefault();
 
-		var result = {}
+		var result = {};
 		var postData = $(this).serializeArray();
 
 		$.each( postData, function( i, pD ) {
@@ -89,14 +89,14 @@ $(document).ready(function(){
 	        modal: true,
 	        title: "Confirmação",
 	        height: 150,
-	        width: 250;
+	        width: 250
         });
     }); 
 
 	$("#conf_form").submit(function(e){
   		e.preventDefault();
 
-  		var result = {}
+  		var result = {};
 		var postData = $(this).serializeArray();
 
 		$.each( postData, function( i, pD ) {
@@ -126,7 +126,7 @@ $(document).ready(function(){
 	$("#edit_form").submit(function(e){
 		e.preventDefault();
 
-		var result = {}
+		var result = {};
 		var postData = $(this).serializeArray();
 
 		$("#dialog-confirm").html("Deseja confirmar esta ação?");
@@ -161,10 +161,12 @@ $(document).ready(function(){
 
 	});
 
-	$('#table1 tr').click(function() {
-        var ref = $(this).find("td").html();
-        $(".container").load("adm/edit"+model+"/"+ref+"/searchacc");
-    });
+	$('#table1 tr').on('click', function() {
+		var ref = $(this).find("td").html();
+    	$(this).toggleClass('selected');
+
+    	//$(".container").load("adm/edit"+model+"/"+ref+"/searchacc");
+	});
 
     $("button[id^='back_']").click(function(){
     	model = $(this).attr("id").slice(5);

@@ -227,5 +227,6 @@ h2[title="model-title"]
     border-top-right-radius:0px;
 }
 
-
-
+.selected {
+    background-color: blue;
+}

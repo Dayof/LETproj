@@ -2,7 +2,6 @@ $(document).ready(function(){
 
     function loadExercise(exercise)
     {
-
         $a = $("#ans");
         $a.load("/assync/exercise", exercise);
     }

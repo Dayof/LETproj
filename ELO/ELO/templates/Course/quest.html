@@ -11,19 +11,22 @@
 {% endblock %}
 
 {% block body %}
-	module_id : {{ module_id }}
-	lesson_id : {{ lesson_id }}
-	exercise_id : {{ exercise_id }}
-	course_id : {{ course_id }}
-	slide_id : {{ slide_num }}
-
-	<form id="question_form" action="" method="post">
-		{{ form }}
-		{% csrf_token %}
-		<input type="submit" value="Submit"></input>
-	</form>
-
-	<div id ="qid_{{ question_id }}"></div>
+	{% if sub %} 
+		Mensagem enviada com sucesso!
+	{% else %}
+		{% if exc %} 
+			{{ exc }}
+		{% else %}
+			<form id="question_form" action="" method="post">
+				{{ form }}
+				{% csrf_token %}
+				<input type="submit" value="Submit"></input>
+			</form>
+		{% endif %}
+	{% endif %}
+	<div id="qid_{{ question_id }}"></div>
+	<div id="lid_{{ lesson_id }}_sn_{{ slide_number }}"></div>
+	<div id="eid_{{ exercise_id }}"></div>
 
 {% endblock %}
 

@@ -171,6 +171,7 @@ class UiHomeProfile(IfUiProfile):
         if not 'matric' in user:
             request.session['user'] = self.bus.refreshUser(request)
             user = request.session['user']
+            print user
         return render(request, "Profile/home.html", {'user' : user})
 
 ## Camada de apresentação para a página de perfil completa.
