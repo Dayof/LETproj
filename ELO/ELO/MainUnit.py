@@ -80,6 +80,8 @@ class Factory:
 			database = Tutor
 		elif entity == "Student":
 			database = Student
+		elif entity == "about":
+			database = entity
 		else:
 			database = None
 

@@ -180,7 +180,9 @@ class UiLogin(IfUiLogin):
 
             if not database:
                 target = ""
-            if database.__name__ == "Professor":
+            if database == "about":
+                return render(request, "Login/about.html")
+            elif database.__name__ == "Professor":
                 target = "proflogin"
             elif database.__name__ == "Tutor":
                 target = "tutorlogin"

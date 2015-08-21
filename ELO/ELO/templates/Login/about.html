@@ -1,0 +1,23 @@
+{% extends "includes/wrapper.html" %}
+{% load staticfiles %}
+
+{% block title %} SALiE - Quem Somos{% endblock %}
+
+{% block head %}
+    <link   rel="stylesheet"
+            type="text/css"
+            href="{% static 'Login/styles.css' %}" />
+{% endblock %}
+
+{% block content %} 
+
+    <div class="text-center">
+        <h2>Bem vindo ao SALIE!</h2>
+        O Sitema de Aprendizado de Línguas Estrangeiras foi desenvolvido por alunos da Ciência da Computação em parceria com o LET, ambos parte da Universidade de  
+        Brasília(UnB). Com a intenção de facilitar e agilizar a aprendizagem de línguas à distância, estão disponíveis vários tipos de exercícios e aulas multimídia. 
+        <h3><b>Bom proveito!</b></h3>
+    </div>
+
+{% endblock %}
+
+

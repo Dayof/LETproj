@@ -30,6 +30,7 @@ factory = Factory()
 urlpatterns = patterns('', 
 	## URL da home page, ou seja, a pagina de login do aluno.
 	url(r'^$', factory.runHome, {'entity': 'Student'}),
+	url(r'^about/?$', factory.runHome, {'entity': 'about'}),
  	## URL para o login do professor.
 	url(r'^proflogin/?$', factory.runHome, {'entity': 'Professor'}),
 	## URL para o login do monitor.
