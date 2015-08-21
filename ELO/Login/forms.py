@@ -12,10 +12,13 @@ import ELO.locale.index as lang
 ## Classe de formulário para o fomulário de Login.
 # Recebe o username e o password e passa para a LoginUnit para ser validado.
 class LoginForm(forms.Form):
-    username = forms.CharField(max_length = 32)
-    password = forms.CharField(widget = forms.PasswordInput)
+    username = forms.CharField(max_length = 32, widget=forms.TextInput(
+                                attrs={'placeholder': lang.DICT['USERNAME'], 
+                                'class': 'form-control'}))
+    password = forms.CharField(widget = forms.PasswordInput(
+                                attrs={'placeholder': lang.DICT['PASSWORD'], 
+                                'class': 'form-control'}))
 
-    
     ## Verifica se a formatação do nome está correta.
     # Caso esteja, retorna o nome, caso contrário, lança uma excessão.
     def clean_username(self):

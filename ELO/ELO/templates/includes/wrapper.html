@@ -8,6 +8,7 @@
         <script src="{% static 'vendor/jquery/jquery-1.11.0.min.js' %}"></script>
         <script src="{% static 'vendor/jquery/jquery-ui-1.10.4.custom.min.js' %}">
         </script>
+        <script src="{% static 'vendor/bootstrap/bootstrap.min.js' %}"></script>
         <link   rel="stylesheet"
                 type="text/css"
                 href="{% static 'vendor/jquery/jquery-ui-1.10.4.custom.min.css' %}"/>
@@ -15,6 +16,10 @@
         <link   rel="stylesheet" 
                 type="text/css" 
                 href="{% static 'vendor/styles.css' %}" />
+        <link rel="stylesheet" 
+              type="text/css" 
+              href="{% static 'vendor/bootstrap/bootstrap.min.css' %}" />
+
         {% block head %}{% endblock %}
     </head>
 
@@ -23,7 +28,7 @@
             {% include "includes/header.html" %}
         </div>
         
-        <div class="content">
+        <div class="container-fluid">
             {% block content %}{% endblock %}
         </div>
 
