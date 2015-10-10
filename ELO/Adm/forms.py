@@ -29,9 +29,6 @@ class RegUserForm(forms.Form):
 	userMatric = forms.IntegerField(label = "Matricula:",required= True)
 	userCampus = forms.IntegerField(label = "Código do Campus:",
 									required= True) 
-	userSex = forms.ChoiceField(choices=[('M','M'),("F",'F')], 
-								widget=forms.RadioSelect(),
-								required= True, label = "Sexo")
 	userEmail =  forms.EmailField(label = "Email:", required= True)
 	userPassword = forms.CharField(widget = forms.PasswordInput(
 								attrs={'autocomplete':'off'}), 
@@ -64,15 +61,6 @@ class RegUserForm(forms.Form):
 		except ValueError:
 			raise forms.ValidationError(lang.DICT["EXCEPTION_INV_STU_CP"])
 		return campus
-
-	## Verifica se a formatação do sexo do usuário está correta.
-	#	Caso esteja, retorna o sexo, caso contrário, lança uma excessão.
-	def clean_userSex(self):
-		try:
-			sex = Sex(self.cleaned_data["userSex"])
-		except ValueError:
-			raise forms.ValidationError(lang.DICT["EXCEPTION_INV_STU_SX"])
-		return sex
 
 	## Verifica se a formatação do email do usuario está correta.
 	#	Caso esteja, retorna o e-mail, caso contrário, lança uma excessão.
@@ -222,9 +210,6 @@ class EditUserForm(forms.Form):
 	userMatric = forms.IntegerField(label = "Matricula:",required= True)
 	userCampus = forms.IntegerField(label = "Código do Campus:",
 									required= True) 
-	userSex = forms.ChoiceField(choices=[('M','M'),("F",'F')], 
-								widget=forms.RadioSelect(),
-								required= True, label = "Sexo")
 	userEmail =  forms.EmailField(label = "Email:", required= True)
 	
 	## Verifica se a formatação do nome do usuário está correta.
@@ -254,15 +239,6 @@ class EditUserForm(forms.Form):
 		except ValueError:
 			raise forms.ValidationError(lang.DICT["EXCEPTION_INV_STU_CP"])
 		return campus
-
-	## Verifica se a formatação do sexo do usuário está correta.
-	#	Caso esteja, retorna o sexo, caso contrário, lança uma excessão.
-	def clean_userSex(self):
-		try:
-			sex = Sex(self.cleaned_data["userSex"])
-		except ValueError:
-			raise forms.ValidationError(lang.DICT["EXCEPTION_INV_STU_SX"])
-		return sex
 
 	## Verifica se a formatação do email do usuario está correta.
 	#	Caso esteja, retorna o e-mail, caso contrário, lança uma excessão.

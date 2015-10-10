@@ -753,7 +753,7 @@ class Lesson(object):
 	def exercises(self):
 		del self.__exercises
 
-##Unidade básica de apresendisado. 
+##Unidade básica de apresendizado. 
 #Em cada lição haverão exercicios com o intuito de avaliar o desenpenho do aluno.
 #O rendimento do aluno em tais exercicios regerá a experiência do aluno no curos
 class Exercise(object):

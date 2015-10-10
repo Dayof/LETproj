@@ -43,7 +43,6 @@ from Profile.forms import (
     NameForm, 
     PasswordForm,
     LanguageForm,
-    SexForm,
     BiosForm,
     InterestsForm,
     AvatarForm)
@@ -400,7 +399,7 @@ class UiAdm(IfUiAdm):
             RequestConfig(request, paginate={"per_page": 
                                             25}).configure(table)
 
-            return render(request, HOME_ACCOUNTS, 
+            return render(request, HOME_URL, 
                         {'form': form_search, 'data':table, 'err': exc,
                         'model':model,})
 
@@ -459,7 +458,6 @@ class UiAdm(IfUiAdm):
                     form = EditUserForm(initial = {'username':acc[0]['NAME'], 
                                                 'userMatric':acc[0]['MATRIC'],
                                                 'userCampus': acc[0]['CAMPUS'], 
-                                                'userSex': acc[0]['SEX'], 
                                                 'userEmail': acc[0]['EMAIL']})
             elif model1 == "c":
                 URL = ACCOUNTS_URL('conf_action.html')
@@ -486,6 +484,7 @@ class UiAdm(IfUiAdm):
 class BusAdm(IfBusAdm): 
 
     def __check_db(self, model):
+        print model
         if model == STUDENTS:
             db = Student
         elif model == PROFESSORS:
@@ -499,6 +498,7 @@ class BusAdm(IfBusAdm):
         else:
             db = None
             # fazer lang.dict
+
             raise ValueError("Modelo incorreto.")
 
         return db
@@ -520,7 +520,7 @@ class BusAdm(IfBusAdm):
         #   do usuário.
         dict_data = {}
         # Possíveis campos valorados dos modelos de contas.
-        database_fields = ['NAME', 'SEX', 'PASSWORD', 'MATRIC', 
+        database_fields = ['NAME', 'PASSWORD', 'MATRIC', 
                            'CAMPUS','EMAIL', 'PROFESSOR']
 
         ## Percorre a requisição procurando os dados inseridos para registro.
@@ -548,7 +548,10 @@ class BusAdm(IfBusAdm):
         #   Caso a requisição venha com outro modelo não especificado nos
         #   condicionais então é emitido erro.
 
+
+
         model = str(request.POST['model'])
+        print model
 
         db = self.__check_db(model)
 
@@ -810,7 +813,6 @@ class PersAdm(IfPersAdm):
                     'MATRIC' :      sf('MATRIC'),
                     'BIOS' :        sf('BIOS'),
                     'CAMPUS' :      sf('CAMPUS'),
-                    'SEX' :         sf('SEX'),
             }
 
             if database is Student:
@@ -930,7 +932,6 @@ class PersAdm(IfPersAdm):
             if database != Adm:
                 sf('MATRIC', request['userMatric'])
                 sf('CAMPUS', request['userCampus'])
-                sf('SEX', request['userSex'])
        
         except (database.DoesNotExist, 
             database.MultipleObjectsReturned) as exc: 
