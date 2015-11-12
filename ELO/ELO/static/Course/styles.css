@@ -1,4 +1,4 @@
-html, body,.content { height: 100%; }
+html, body,.content { height: 100%; width: 100%; margin: 0; }
 
 #topper
 {
@@ -9,38 +9,10 @@ html, body,.content { height: 100%; }
     float: left;
 }
 
-#left_bar
-{
-    background-color: #E3E3E3;
-    width: 20%;
-    height: 75%;
-    position: relative;
-    float: left;
-}
-
 .ui-
 {
     width: 100%;
     height: 100%;
-}
-
-#container
-{
-    width: 79%;
-    float: left;
-    height: 62%;
-    position: relative;
-    background-color: #aaaaaa;
-    overflow: scroll;
-}
-
-#bottomer
-{
-    position: relative;
-    float: left;
-    height: 3%;
-    width: 79%;
-    background-color: #909090;
 }
 
 #lesson_ctn
@@ -92,3 +64,49 @@ div[class^='lesson_']
 {
     color: orange;
 }
+
+/* ----------------- BLOCK OF LESSONS ----------------- */
+
+.salie-left-bar
+{
+    width: 20%;
+    height: 75%;
+    position: relative;
+    float: left;
+}
+
+/* ----------------- ENDCATEGORY ----------------- */
+
+
+
+/* ----------------- SLIDE ----------------- */
+
+#salie-block-slide
+{
+    text-align: center;
+    height: 500px; 
+    background-size: cover;
+    padding-top: 20%;
+}
+
+#salie-container
+{
+    width: 79%;
+    float: left;
+    height: 62%;
+    position: relative;
+    background-color: #aaaaaa;
+    overflow: scroll;
+}
+
+
+.salie-bottomer
+{
+    position: relative;
+    float: left;
+    height: 3%;
+    width: 79%;
+    background-color: #909090;
+}
+
+/* ----------------- ENDCATEGORY ----------------- */

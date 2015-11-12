@@ -4,7 +4,7 @@ $(document).ready(function(){
 
     function loadLesson(less_id, slide)
     {
-        $c = $('#container');
+        $c = $('#salie-container');
         $c.load("/assync/lesson/", 
             {'lesson_id':less_id, 
              'slide_number': slide,

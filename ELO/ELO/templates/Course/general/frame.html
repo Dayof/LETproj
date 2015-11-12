@@ -13,7 +13,7 @@
 {% endblock %}
 
 {% block content %}
-    <div id="left_bar">
+    <div class="col-md-3 salie-left-bar">
         <div id="module_accordion">
         {% for module in course.MODULE %}
             <h3><div id=
@@ -40,21 +40,21 @@
         {% endfor %}
         </div>
     </div>
-    <div id="topper">
-        
-    </div>
-    <div id="container">
-        {% include 'Course/general/assync_std.html' %}
-        {# #l_info_(lesson number); .(slide number) #}
-    </div>
-    <div id="bottomer">
+    <div id="topper"></div>
+    <div class="col-md-8">
+        <div id="salie-container">
+            {% include 'Course/general/assync_std.html' %}
+            {# #l_info_(lesson number); .(slide number) #}
+        </div>
         <center>
-            <button id="l_bt_b" disabled>&lt;</button>
-            <button id="l_bt_f" disabled>&gt;</button>
+            <div class="salie-bottomer">
+                <button id="l_bt_b" disabled>&lt;</button>
+                <button id="l_bt_f" disabled>&gt;</button>
+            </div>
         </center>
     </div>
     <br />
-    <div id="icon-search">
+    <div id="icon-search" class="col-md-1">
         <i class="fa fa-question">
         </i>
     </div>
