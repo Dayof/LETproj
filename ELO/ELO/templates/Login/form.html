@@ -7,36 +7,48 @@
     <link   rel="stylesheet"
             type="text/css"
             href="{% static 'Login/styles.css' %}" />
+    <script src="{% static 'Login/script.js' %}"></script>
 {% endblock %}
 
 {% block content %} 
 
     {% if error %}
-        <div class="error">
+        <div class="alert alert-danger error" 
+             role="alert">
+            <span class="glyphicon glyphicon-exclamation-sign" 
+                  aria-hidden="true"></span>
+            <span class="sr-only">Error:</span>
             {{ error }}
         </div>
     {% endif %}
 
     <div class="center-block">
-        <form method="POST" action="/{{ target }}">
+        <form method="POST" 
+              action="/{{ target }}">
 
             <div class="row">
                 <div class="form-group">
-                    <div class="col-md-2 col-md-offset-5">{{ form.username }}</div>
+                    <div class="col-md-2 col-md-offset-5">
+                        {{ form.username }}
+                    </div>
                 </div>
             </div>
 
             <div class="row">
                 <div class="form-group">
-                    <div class="col-md-2 col-md-offset-5">{{ form.password }}</div>
+                    <div class="col-md-2 col-md-offset-5">
+                        {{ form.password }}
+                    </div>
                 </div>
             </div>
             <div></div>
             {% csrf_token %}
             <div class="row">
                 <div class="col-md-2 col-md-offset-5 text-center">
-                    <button type="submit" name="login_form" 
-                            class="btn btn-default"/>Acessar
+                    <button type="submit" 
+                            name="login_form" 
+                            class="btn btn-default">
+                            Acessar
                     </button> 
                 </div>
             </div>
@@ -44,10 +56,33 @@
             <div class="row">
                 <div class="checkbox">
                     <div class="col-md-2 col-md-offset-5">
-                        <label><input type="checkbox"> Lembrar login de acesso?    
+                        <label>
+                            <input type="checkbox"> 
+                            Lembrar login de acesso?    
+                            </input>
                         </label>
                     </div>
                 </div>
+            </div>
+
+            <div class="dropdown col-md-2 col-md-offset-5 text-center">
+                <button class="btn btn-default dropdown-toggle" 
+                        type="button" 
+                        id="dropdownMenu1" 
+                        data-toggle="dropdown" 
+                        aria-haspopup="true" 
+                        aria-expanded="true">
+                        Tipo da Conta
+                        <span class="caret"></span>
+                </button>
+                <ul class="dropdown-menu col-md-2 col-md-offset-5 text-center"
+                    aria-labelledby="dropdownMenu1">
+                    <li><a href="/">Aluno(a)</a></li>
+                    <li><a href="/proflogin/">Professor(a)</a></li>
+                    <li><a href="/tutorlogin/">Tutor(a)</a></li>
+                    <li><a href="/364fd8cdc3a35a89b7be75bc9d10ebea/">Adm</a></li>
+                    <li><a href="/e50b058759a52eda8a507687887186e5/">God</a></li>
+                </ul>
             </div>
         </form>
     </div>

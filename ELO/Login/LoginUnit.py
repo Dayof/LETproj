@@ -156,6 +156,7 @@ class UiLogin(IfUiLogin):
                 else:
                     target = ""
 
+
                 return render(request, "Login/form.html", {'form': login_form, 
                     'error': exc, 'target': target})
             else:
@@ -189,7 +190,7 @@ class UiLogin(IfUiLogin):
             elif database.__name__ == "Adm":
                 target = "364fd8cdc3a35a89b7be75bc9d10ebea"
             elif database.__name__ == "God":
-                target = "e50b058759a52eda8a507687887186e5"
+                target = "#e50b058759a52eda8a507687887186e5"
             else:
                 target = ""
 
