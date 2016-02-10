@@ -1,26 +1,5 @@
-#login_left
+.login
 {
-    position: relative;
-    float: right;
-    width: 50%;
-}
+    margin-top: 18em;
 
-#login_right
-{
-    position: relative;
-    float: right;
-    width: 50%;
-}
-
-#login_center
-{
-    vertical-align: middle;
-}
-
-#logo
-{
-	opacity:0.9;
-	padding:10%;
-	width:100px;
-	height:30px; 
 }

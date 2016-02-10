@@ -1,174 +1,324 @@
+/*------------------------------------------------------------------
+[Table of contents]
 
-/**Arquivo folha de estilos de css**/
+0. Header
+	0.1. Navigation
+1. Body
+	1.1 Typography
+					2. Content
+						2.1. Homepage
+							2.1.1 Slider
+							2.1.2 How does it work
+							2.1.3 Didactics
+							2.1.4 Look and feel
+							2.1.4 Used & loved by
+							2.1.5 Testimonials
+							2.1.6 Benefits
+							2.1.7 Audience
+						2.2. Landing
+						2.3. Features
+						2.4. Blog
+						2.5. Store
+						2.6. Pricing
+						2.7  Partners
+						2.8  Contact
+						2.9  WooCommerce
+						2.10 Audience	
+3. Footer
+4. Media queries
+	4.1 Small devices (tablets, 768px and up)
+	4.2 Medium devices (desktops, 992px and up)
+	4.3 Large devices (large desktops, 1200px and up
 
-/***HEAD***/
-/*Logo ELO no header*/
-/** Arquivo folha de estilos de css. */
+-------------------------------------------------------------------*/
 
-/* ARQUIVO includes/wrapper.html */
 
-html, body { height: 95%; }
+/*--------------- [0. Header ] --------------- */
 
-body
-{
-	background:#E3E3E3;
-	margin:0;
-	padding:0;	
-	padding-bottom:30px;
+
+/* NAVIGATION */
+.main-navigation {
+	margin:0 !important;
 }
 
-/* Ícone do ELO */
-.banner
-{
- 	text-shadow: -1px 0 gray, 0 1px gray, 1px 0 gray, 0 -1px gray;
-	position: fixed;
-	font-size: 30px;
-	text-align: left;
-	color: white;
-	top: 0px;
-	padding-left:20px;
+.navbar-default {
+	background: 		#fff;
+	-webkit-box-shadow: 0px 0px 5px rgba(50, 50, 50, 0.15);
+	-moz-box-shadow:    0px 0px 5px rgba(50, 50, 50, 0.15);
+	box-shadow:         0px 0px 5px rgba(50, 50, 50, 0.15);
+	font-family: 		'open sans', helvectia, sans-serif;
+	font-weight: 		700;
+	text-transform: 	uppercase;
+	font-size: 			13px;
 }
 
-/*Texto dos links no header*/
-/* Menu principal */
-.mainMenu
-{
-	position: fixed;
-	top:0px;
-	width:100%;
-	height:35px;
-	padding-top: 5px;
-	background-color:black;
+
+.navbar-brand {
+	background-image: url(../../media/images/salie-logo.png);
+	background-repeat: no-repeat;
+	width: 185px;
+	height: 34px;
+	margin: 8px 15px 8px 0px;
 }
 
-/* Botão do menu */
-.field
-{
-	text-align: right;
-	color: white;
-	font-size:17px;
-	float:right;
+.navbar-nav {
+	margin-top:0px;
 }
-/*Links do header(Login,home,profile)*/
-a.field
-{	
-	text-decoration:none;
+
+#menu-primary li ul li a {
+	text-transform: none;
 }
-/*Cor dos links quando o mouse se posiciona sobre eles*/
-.field:hover
-{
-	color: #67B6FF;
+
+.navbar-default .navbar-nav > li > a {
+	padding: 5px 15px;
+	color: #b7aba1;
 }
-/*Texto do head*/
-.mainMenu
-{
-	position: fixed;
-	top:5px;
-	right:10px;
-	width:100%;
+
+	.navbar-default .navbar-nav > li > a:hover {
+		color: #2654a3;
+	}
+
+.navbar-default .navbar-nav > .active > a, .navbar-default .navbar-nav > .active > a:hover, .navbar-default .navbar-nav > .active > a:focus {
+    background-color: transparent;
+    color: #67615b;
 }
-/*Barra do head*/
-.menuTab
-{	
-	text-align:left;
-	background-color: black;
-	position:fixed ;
-	top:0px;
-	width:100%;
-	height:35px;
+
+.navbar-default .btn-primary.active {
+	background: #f67f2b;
+	border:0;
+}
+	.btn-primary.active:hover {
+		background: #f66a08 !important;
+		border:0;
+	}
+
+.navbar-default .btn-default {
+	color:#fff !important;
+}
+	.btn-default:hover {
+		color:#fff !important;
+		color: #ffffff  !important;
+		background-color: #ee680a  !important;
+		border-color: #db6009  !important;
+	}
+
+/*--------------- [1. Body] --------------- */
+
+body {
+	font-family: "Open Sans", "Helvetica Neue", Helvetica, Arial, sans-serif;
+	/*background-image: url('../images/bg-pattern.jpg');*/
+	background-repeat: repeat;
+	font-weight: 400;
+}
+
+.container {
+  padding-left: 15px;
+  padding-right: 15px;
+}
+
+.row {
+  margin-bottom: 20px;
+}
+.row .row {
+  margin-top: 10px;
+  margin-bottom: 0;
+}
+
+hr {
+  margin-bottom: 40px;
+  border-top: 1px solid #d5d7da;
+}
+
+.body-header {
+	margin: 65px 0 0 0;
+}
+
+.center {
+	text-align: center;
+}
+
+.margin-top {
+	margin-top:20px;
+}
+
+.margin-top-big {
+	margin-top:40px;
+}
+
+.no-margin-top {
+	margin-top:0px;
+}
+
+
+/*--------------- [1.1 Typography] --------------- */
+/*@font-face {
+    font-family: 'meta_bookroman';
+    src: url('../font/metabook-roman_0-webfont.eot');
+    src: url('../font/metabook-roman_0-webfont.eot?#iefix') format('embedded-opentype'),
+         url('../font/metabook-roman_0-webfont.woff') format('woff'),
+         url('../font/metabook-roman_0-webfont.ttf') format('truetype'),
+         url('../font/metabook-roman_0-webfont.svg#meta_bookroman') format('svg');
+    font-weight: normal;
+    font-style: normal;
+}*/
+
+h1, h2, h3, h4, h5, h6 {
+    font-family:'meta_bookroman', sans-serif;
+    color:#271100;
+    font-weight:normal;
+    margin-bottom:10px;
+}
+
+h1 a, h2 a, h3 a, h4 a, h5 a, h6 a { font-weight: inherit; }
+h1 { font-size: 36px; margin-bottom: 10px;}
+h2 { font-size: 30px; line-height: 32px; margin-bottom: 10px; }
+h3 { font-size: 23px; line-height: 27px; margin-bottom: 10px; }
+h4 { font-size: 20px; line-height: 25px; margin-bottom: 4px; margin-top: 25px; }
+h5 { font-size: 17px; line-height: 22px; margin-bottom: 4px; }
+h6 { font-size: 14px; line-height: 18px; font-family: 'Open Sans', sans-serif; font-weight: bold; }
+
+p {
+    margin: 0 0 20px 0;
+    line-height:20px;
+    color:#5a5550;
+}
+
+
+/*--------------- [3. footer] --------------- */
+
+/*#sub-footer-container {
+	background-image: url('../images/bg-pattern-sub-footer.jpg');
+	background-repeat: repeat;
+	padding: 25px 0 15px 0;
+}*/
+
+.navbar-default .footer {
+	text-align: center;
+	margin-top: 15px;
+}
+
+.social i {
+	color:#bdd743;
+	width: 25px;
+	display: inline-block;	
+}
+
+#footer .input-group i {
+	color: #f67f2b;
+	text-decoration: none;
+}
+
+#forget-password-windows {
+	width:480px;
+	height: 208px;
+	border: 0;
+}
+
+
+/*------------- [4.1 Small devices (tablets, 768px and up) ] ------------- */
+
+@media (min-width: 768px) {
+
+	h1 { font-size: 46px; margin-bottom: 10px;}
+	h2 { font-size: 36px; line-height: 50px; margin-bottom: 10px; }	
+	h3 { font-size: 23px; line-height: 27px; margin-bottom: 10px; }
+	h4 { font-size: 20px; line-height: 25px; margin-bottom: 4px; margin-top: 25px; }
+	h5 { font-size: 17px; line-height: 22px; margin-bottom: 4px; }
+	h6 { font-size: 14px; line-height: 18px; font-family: 'Open Sans', sans-serif; font-weight: bold; }
+
+	/*.navbar>.container .navbar-brand {
+		background-image: url(../images/logo-medium.gif);
+		background-repeat: no-repeat;
+		background-size: 53px 45px;
+		width: 53px;
+		height: 45px;
+		margin: 14px 15px 0 0;
+	}*/
+	
+	.navbar-default .navbar-nav > li > a {
+		padding: 5px 10px;
+		color: #6499f5;
+	}	
+	
+	#menu-primary li a {
+		padding: 30px 10px;
+	}
+	
+		#menu-primary li ul li a {
+			padding: 7px 10px ;
+			text-transform: none;
+		}
+		#menu-primary li ul li a:before {
+			font-family: FontAwesome;
+			font-style: normal;
+			font-weight: normal;			
+		}
+
+		.dropdown-menu {
+			padding:0 0 5px 0;
+			border:1px solid #ded1c5;
+			border-top:1px solid #e3e3e3;
+		}
+	
+	.second-navigation {
+		margin-top: 25px; 
+		margin-bottom: 10px;
+	}
+	
+	.navbar-default .navbar-nav>.active>a, .navbar-default .navbar-nav>.active>a:hover, .navbar-default .navbar-nav>.active>a:focus	{
+		background: #eee;
+	}
+	
+	
+	/* display big logo on landingpage for this situation */
+	/*.navbar>.container .navbar-brand.landingpage {
+		background-image: url(../images/logo-big.gif);
+		background-repeat: no-repeat;
+		width: 245px;
+		height: 45px;
+		margin: 14px 15px 0 0;		
+	}	*/
+
+	.navbar-collapse {
+		margin-top:20px;
+		margin-bottom: 10px;
+	}
+
+	.body-header {
+		margin: 90px 0 0px 0;
+	}
+
+}
+
+
+/*------------- [4.2 Medium devices (desktops, 992px and up) ] ------------- */
+
+@media (min-width: 992px) {
+
+	.navbar>.container .navbar-brand {
+		background-image: url(../../media/images/salie-logo.png);
+		background-repeat: no-repeat;
+		background-size: 150px 55px;
+		width: 150px;
+		height: 70px;
+		margin: 14px 15px 0 0;		
+	}
+			
+}
+
+
+/*---------- [4.3 Large devices (large desktops, 1200px and up) ] --------- */
+
+@media (min-width: 1200px) {
+
+	h1 { font-size: 56px; margin-bottom: 20px;}
+	h2 { font-size: 46px; line-height: 50px; margin-bottom: 10px; }	
+	h3 { font-size: 23px; line-height: 27px; margin-bottom: 10px; }
+	h4 { font-size: 20px; line-height: 25px; margin-bottom: 4px; margin-top: 25px; }
+	h5 { font-size: 17px; line-height: 22px; margin-bottom: 4px; }
+	h6 { font-size: 14px; line-height: 18px; font-family: 'Open Sans', sans-serif; font-weight: bold; }
 	
 }
 
-/***CONTENT***/
-/*Cor da mensagem de erro*/
-.error
-{
-	color: #dd1150;
-}
-/*Texto dos conteúdos da página(infos)*/
-/* Conteúdo do site */
 
-.content
-{
-	text-align: right;
-	color: #331156;
-	margin-top: 1cm;
-	height:100%;
-	padding:10px;
-	overflow:auto;
-  	padding-bottom:50px; /* this needs to be bigger than footer height*/	
-}
-body
-{
-	background:#E3E3E3;
-	margin:10;
-	padding:0;	
-	padding-bottom:30px;
-	min-height:100%;
-}
-
-/* FIM-ARQUIVO wrapper */
-
-.error
-{
-	color: #dd1150;
-}
-
-.firstAcess
-{
-	color:gray;
-}
-
-/*Forms da page de login*/
-.ffield
-{
-	text-align: center;
-	margin-top: 0.2cm;
-	margin-bottom:10px;
-}
-
-/***FOOT***/
-/*Barra de footer*/
-.foot
-{	
-	right:0;
-	left:0;
-	clear:both;
-   	width:100%;
-   	height:50px;
-	margin-top: -50px; /* negative value of footer height */   
-	margin:auto;
-	position:fixed;
-	bottom:0;
-	padding-top:10px;
-	padding-bottom:10px;
-	text-align:center;
-	position:absolute;
-   	width:100%;
-   	height:100px;   	
-}
-
-.footp
-{
-	position:fixed;
-	left:0px;
-	bottom:0px;
-	height:71px;
-	width:100%;
-}
-
-.foot a
-{
-	text-decoration:none;
-}
-
-.footnode
-{
-	color: black;
-}
-
-#logo
-{
-	height: 50px;
-}
 
