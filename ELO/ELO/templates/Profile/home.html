@@ -4,35 +4,62 @@
 {% block title %} {{ DICT.ELO_HOME }} {% endblock %}
 
 {% block head %}
+    <script src="{% static 'Profile/script.js' %}"></script>
     <link   rel="stylesheet"
         type="text/css"
         href="{% static 'Profile/styles.css' %}" />
 {% endblock %}
 
 {% block content %} 
-    <div id="topper">
 
-        <div id="profile-ph">
-            <img id="avatar-ph" src="{{ MEDIA_URL }}{{ user.avatar }}" />
-            <div id="p_info">
-                <h1>{{ user.name }}</h1>
-                <ul>
-                    <li>{{ DICT.MATRIC }}: {{ user.matric }}</li>
-                    <li>{{ DICT.BIOS }}: {{ user.bios }}</li>
-                </ul>
-            </div>
+{% if user.type == 'Student' %}
+    <h1 class="salie-title-course">{{ DICT.COURSE }}</h1>
+    {% for course in user.courses %}
+        <input type="hidden" id="courseName" name="variable" value="{{ course.name }}">
+        <div class="col-md-2 col-md-offset-5">
+            <li class="row salie-course-list">
+                <a class="progress-bar" href="/course/{{ course.id }}/">
+                    <canvas id="inactiveProgress" class="progress-inactive" height="275px" width="275px"></canvas>
+                    <canvas id="activeProgress" class="progress-active"  height="275px" width="275px"></canvas>
+                    <p>{{ course.completion }}</p>
+                </a>
+
+                <div id="progressControllerContainer">
+                    <input type="hidden" id="progressController" min="0" max="100" value="{{ course.completion }}" />
+                </div>
+            </li>
         </div>
-    </div>
-    <div id="bottomer">
-        <div id="p_courses">
-            {% if user.type == 'Student' %}
-                {% for course in user.courses %}
-                    <a href="/course/{{ course.id }}/">
-                        {{ course.name }}: 
-                        <progress value="{{ course.completion }}" max="{{ course.total }}"></progress>
-                    </a>
-                {% endfor %}
-            {% endif %}
+        <div class="col-md-5 col-md-offset-4">
+            <p class="row salie-course-name">{{ course.name }}</p>
         </div>
-    </div>
+    {% endfor %}
+{% endif %}
+
+
 {% endblock %}
+
+<!-- <div id="topper">
+
+    <div id="profile-ph">
+        <img id="avatar-ph" src="{{ MEDIA_URL }}{{ user.avatar }}" />
+        <div id="p_info">
+            <h1>{{ user.name }}</h1>
+            <ul>
+                <li>{{ DICT.MATRIC }}: {{ user.matric }}</li>
+                <li>{{ DICT.BIOS }}: {{ user.bios }}</li>
+            </ul>
+        </div>
+    </div>
+</div>
+<div id="bottomer">
+    <div id="p_courses">
+        {% if user.type == 'Student' %}
+            {% for course in user.courses %}
+                <a href="/course/{{ course.id }}/">
+                    {{ course.name }}: 
+                    <progress value="{{ course.completion }}" max="{{ course.total }}"></progress>
+                </a>
+            {% endfor %}
+        {% endif %}
+    </div>
+</div> -->
